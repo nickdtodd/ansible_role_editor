@@ -1,0 +1,5 @@
+---
+# defaults file for ansible_role_editor
+nt_editor_name: vim
+# Example: - 'scrooloose/nerdtree'
+nt_vim_plugins: []

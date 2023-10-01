@@ -1,0 +1,45 @@
+" Always needed
+set nocompatible
+set shell=bash
+filetype off
+
+" Install Plug if it isn't already installed
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin()
+{% for plugin in nt_vim_plugins %}
+Plug '{{ plugin }}'
+{% endfor %}
+call plug#end()
+
+filetype plugin indent on
+
+" remap jj to escape
+inoremap jj <Esc>
+
+" This shows what you are typing as a command.
+set showcmd
+
+syntax enable
+set autoindent
+set expandtab
+set smarttab
+set shiftwidth=4
+set softtabstop=4
+set noswapfile
+
+" Searching
+set incsearch
+set hlsearch
+
+" Load macvim stuff if required
+if has("gui_macvim")
+    source ~/.vim/includes/macvim
+endif
+
+" Open NERDTree on start
+au VimEnter *  NERDTree | wincmd p

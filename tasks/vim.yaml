@@ -1,0 +1,24 @@
+---
+- name: Install required packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: latest
+  become: True
+  loop:
+    - curl
+    - git
+
+# https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
+- name: Template vimrc
+  ansible.builtin.template:
+    src: templates/vim/vimrc.j2
+    dest: "/home/{{ ansible_user }}/.vimrc"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    
+# Doesn't work :(
+# - name: Install plugins
+#   ansible.builtin.shell:
+#     cmd: |
+#       vim -esv -u vimrc -i NONE -c "PlugInstall" -c "qa"
+#   become_user: "{{ansible_user}}"

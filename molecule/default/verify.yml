@@ -1,0 +1,32 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Include role
+      ansible.builtin.include_role:
+        name: ansible_role_editor
+        public: True
+
+    - name: Assert editor has been installed
+      ansible.builtin.apt:
+        name: "{{ nt_editor_name }}"
+        state: present
+      become: True
+
+    - name: Stat vimrc
+      ansible.builtin.stat:
+        path: "/home/{{ ansible_user }}/.vimrc"
+      register: vimrc
+      when: nt_editor_name == "vim"
+
+    - name: Assert vimrc
+      ansible.builtin.assert:
+        that:
+          - config.stat.exists == True
+          - config.stat.pw_name == ansible_user
+          - config.stat.gr_name == ansible_user
+          - config.stat.size > 0
+      when: nt_editor_name == "vim"

@@ -1,0 +1,12 @@
+---
+# tasks file for ansible_role_editor
+- name: Install editor
+  ansible.builtin.package:
+    name: "{{ nt_editor_name }}"
+    state: latest
+  become: True
+
+- name: Include vim tasks
+  ansible.builtin.import_tasks:
+    file: vim.yaml
+  when: nt_editor_name == "vim"
